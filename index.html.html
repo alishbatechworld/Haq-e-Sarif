@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Haq-e-Sarif | حقِ صارف — Consumer Rights & Tax Assistant</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            urdu: ['Noto Nastaliq Urdu', 'serif'],
+          },
+          colors: {
+            pakGreen: {
+              DEFAULT: '#01411C',
+              medium: '#1B4D3E',
+              light: '#E8F5E9',
+              mint: '#D1E7DD',
+            },
+            cream: {
+              DEFAULT: '#FFFDF9',
+              warm: '#FAF7F2',
+              border: '#E6EFEA',
+            },
+            softRose: {
+              DEFAULT: '#D81B60',
+              light: '#FCE4EC',
+              mid: '#F8BBD0',
+            },
+            charcoal: '#2D2926',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      background-color: #FAF7F2;
+      color: #2D2926;
+      font-family: 'Inter', sans-serif;
+    }
+    .urdu-text {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      line-height: 2.1;
+    }
+    .fade-in {
+      animation: fadeIn 0.25s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between bg-cream-warm text-charcoal selection:bg-softRose-light selection:text-softRose">
+
+  <!-- STICKY HEADER -->
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-md border-b border-pakGreen-mint shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- Bilingual Brand + Original Shield & Scale Emblem Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-pakGreen flex items-center justify-center shadow-sm border-2 border-pakGreen-mint relative overflow-hidden">
+          <svg viewBox="0 0 64 64" class="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Haq-e-Sarif Shield Emblem">
+            <path d="M32 6L52 14V30C52 43.5 43.4 53.6 32 58C20.6 53.6 12 43.5 12 30V14L32 6Z" fill="#FFFDF9" stroke="#D1E7DD" stroke-width="2.5"/>
+            <path d="M32 16V44M20 24H44" stroke="#01411C" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M20 24L16 33H24L20 24ZM44 24L40 33H48L44 24Z" fill="#D81B60"/>
+            <path d="M25 44H39" stroke="#01411C" stroke-width="2.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-pakGreen">Haq-e-Sarif</h1>
+            <span class="text-base sm:text-lg font-bold text-softRose urdu-text">| حقِ صارف</span>
+          </div>
+          <p class="text-[11px] font-medium text-stone-500">AI Consumer Rights, Tax Ledger &amp; Price Guard • Punjab</p>
+        </div>
+      </div>
+
+      <!-- Right Controls: City Selector + Live DC Sync Pill with Real Current Date -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <div class="flex items-center gap-1.5 bg-cream-warm border border-pakGreen-mint rounded-xl px-3 py-2">
+          <i class="fa-solid fa-location-dot text-softRose text-xs"></i>
+          <label for="city-selector" class="sr-only">Select City</label>
+          <select id="city-selector" class="bg-transparent text-xs sm:text-sm font-bold text-pakGreen focus:outline-none cursor-pointer">
+            <option value="Lahore" selected>Lahore</option>
+            <option value="Rawalpindi">Rawalpindi</option>
+            <option value="Faisalabad">Faisalabad</option>
+            <option value="Multan">Multan</option>
+            <option value="Gujranwala">Gujranwala</option>
+          </select>
+        </div>
+
+        <button id="open-dc-modal-btn" type="button"
+          class="group flex items-center gap-2.5 bg-pakGreen-light hover:bg-pakGreen-mint/70 border border-pakGreen/20 rounded-xl px-3.5 py-2 transition-all cursor-pointer">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-ping"></span>
+          <div class="text-left">
+            <div class="text-xs font-bold text-pakGreen flex items-center gap-1.5">
+              <span>Daily DC Rate List: Auto-Synced</span>
+              <i class="fa-solid fa-chevron-right text-[10px] opacity-60 group-hover:translate-x-0.5 transition-transform"></i>
+            </div>
+            <div class="text-[10px] font-semibold text-stone-600">
+              <span id="live-dc-date-time" class="text-pakGreen font-bold">25 Nov 2026, 09:00 AM PKT</span> • <span id="header-portal-domain">lahore.punjab.gov.pk</span>
+            </div>
+          </div>
+        </button>
+
+        <!-- Citizen Portal Login / Profile Controls -->
+        <button id="open-auth-modal-btn" type="button"
+          class="flex items-center gap-2 bg-pakGreen hover:bg-pakGreen-medium text-white rounded-xl px-3.5 py-2 text-xs font-bold shadow-xs transition-all cursor-pointer">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Citizen Login / Sign Up</span>
+        </button>
+
+        <div id="citizen-profile-pill" class="hidden items-center gap-2 bg-softRose-light/80 border border-softRose/30 rounded-xl px-3 py-1.5">
+          <button id="open-profile-modal-btn" type="button" class="flex items-center gap-2 text-left cursor-pointer" title="Edit Citizen Profile">
+            <div class="w-7 h-7 rounded-lg bg-pakGreen text-white flex items-center justify-center text-xs font-extrabold" id="citizen-avatar-initials">AS</div>
+            <div>
+              <div class="text-xs font-extrabold text-charcoal leading-tight flex items-center gap-1">
+                <span id="citizen-display-name">Citizen</span>
+                <span class="text-[9px] px-1.5 py-0.2 rounded-full bg-pakGreen text-white font-bold" id="citizen-badge-type">Cloud</span>
+              </div>
+              <div class="text-[10px] font-semibold text-stone-600">ID: <span id="citizen-short-uid" class="font-mono text-pakGreen">PK-0000</span></div>
+            </div>
+          </button>
+          <button id="citizen-logout-btn" type="button" title="Logout"
+            class="ml-1 px-2 py-1 rounded-lg bg-white hover:bg-softRose hover:text-white text-softRose text-[11px] font-bold border border-softRose/20 transition-colors cursor-pointer">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO BANNER WITH CLEAN SHIELD & CHECKMARK EMBLEM -->
+  <section class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-6 pb-2">
+    <div class="bg-gradient-to-r from-pakGreen-light via-cream to-softRose-light/70 border border-pakGreen-mint rounded-3xl p-5 sm:p-7 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex-1 space-y-2.5 text-center md:text-left">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cream border border-softRose/25 text-softRose text-xs font-bold shadow-2xs">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Zero Manual Uploads • AI-Synced Punjab Govt Rates &amp; Live Store MRPs</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-charcoal leading-tight">
+          Apne Haq aur Paise ki Hifazat Karein — <span class="text-pakGreen">Bill Scan Karein, Overcharging Rokein!</span>
+        </h2>
+        <p class="text-sm sm:text-base text-stone-600 max-w-2xl">
+          Snap any receipt to isolate hidden GST, verify prices against <strong id="hero-city-label" class="text-pakGreen">Lahore</strong> DC rate lists &amp; Pakistani brand websites, locate nearby Sasta Bazaars &amp; live sales, and generate bilingual complaints.
+        </p>
+      </div>
+
+      <!-- Clean Shield, Scale & Checkmark Emblem Card -->
+      <div class="flex-shrink-0 bg-cream rounded-2xl p-4 border border-pakGreen-mint shadow-xs flex items-center gap-3.5">
+        <div class="w-16 h-16 rounded-2xl bg-pakGreen-light border border-pakGreen/20 flex items-center justify-center">
+          <svg viewBox="0 0 64 64" class="w-12 h-12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Consumer Protection Emblem">
+            <path d="M32 6L52 14V30C52 43.5 43.4 53.6 32 58C20.6 53.6 12 43.5 12 30V14L32 6Z" fill="#01411C"/>
+            <path d="M32 11L47 17V30C47 40.5 40.5 48.5 32 52.2C23.5 48.5 17 40.5 17 30V17L32 11Z" fill="#FFFDF9"/>
+            <path d="M24 31.5L29.5 37L41 25.5" stroke="#01411C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="46" cy="46" r="10" fill="#D81B60"/>
+            <path d="M46 41V51M41 46H51" stroke="#FFFDF9" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="text-left pr-1">
+          <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-softRose-light text-softRose">Sarif Guard AI</span>
+          <p class="text-xs font-extrabold text-pakGreen mt-1">100% Free Civic Audit</p>
+          <p class="text-[11px] text-stone-500 leading-snug mt-0.5">Checks GST, DC Lists &amp; Brand MRPs</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4-TAB NAVIGATION -->
+  <nav class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 pt-4">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 bg-cream p-2 rounded-2xl border border-pakGreen-mint shadow-xs" role="tablist">
+      <button type="button" data-tab="scanner" class="nav-tab flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer bg-pakGreen text-white shadow-sm">
+        <i class="fa-solid fa-receipt"></i>
+        <span>1. Receipt &amp; Tax Scanner</span>
+      </button>
+      <button type="button" data-tab="chat" class="nav-tab flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-charcoal hover:bg-pakGreen-light">
+        <i class="fa-solid fa-comments-dollar"></i>
+        <span>2. Quick Price Checker</span>
+      </button>
+      <button type="button" data-tab="dashboard" class="nav-tab flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-charcoal hover:bg-pakGreen-light">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>3. Tax &amp; Bachat Ledger</span>
+      </button>
+      <button type="button" data-tab="complaint" class="nav-tab flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-charcoal hover:bg-softRose-light">
+        <i class="fa-solid fa-gavel"></i>
+        <span>4. AI Complaint Drafter</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MAIN CONTENT WORKSPACE -->
+  <main class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex-1">
+
+    <!-- =================================================================== -->
+    <!-- TAB 1: SMART RECEIPT & TAX SCANNER + SASTA BAZAR & LIVE SALES       -->
+    <!-- =================================================================== -->
+    <section id="tab-scanner" class="tab-panel space-y-6 fade-in">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left Upload & Sample Trigger Card -->
+        <div class="lg:col-span-4 bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm flex flex-col justify-between space-y-5">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-pakGreen">AI Vision OCR</span>
+            <h3 class="text-xl font-extrabold text-charcoal mt-1">Scan Any Pakistani Bill</h3>
+            <p class="text-xs text-stone-500 mt-1">Supports supermarket thermal receipts, FBR Tier-1 POS slips, and handwritten Urdu <em>kacha</em> bills.</p>
+          </div>
+
+          <label id="drop-zone" for="receipt-file-input"
+            class="border-2 border-dashed border-pakGreen/35 hover:border-pakGreen bg-pakGreen-light/40 hover:bg-pakGreen-light/80 rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2.5">
+            <div class="w-12 h-12 rounded-2xl bg-pakGreen text-white flex items-center justify-center text-lg shadow-xs">
+              <i class="fa-solid fa-camera"></i>
+            </div>
+            <p class="text-sm font-bold text-charcoal">Drop Receipt Photo or Click to Upload</p>
+            <p class="text-[11px] text-stone-500">JPG, PNG, WEBP • Auto-extracts GST &amp; Overcharges</p>
+            <input id="receipt-file-input" type="file" accept="image/*" class="hidden" />
+          </label>
+
+          <div class="space-y-2.5">
+            <button id="try-sample-btn" type="button"
+              class="w-full py-3.5 px-4 rounded-xl bg-softRose hover:bg-pink-700 text-white font-bold text-sm shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+              <span>Try Sample Pakistani Grocery Receipt</span>
+            </button>
+            <p class="text-[11px] text-center text-stone-500">Pre-loaded below with a live Al-Fatah / Metro sample audit</p>
+          </div>
+        </div>
+
+        <!-- Right Itemized Audit Table -->
+        <div class="lg:col-span-8 bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm space-y-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 border-b border-cream-border pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-extrabold uppercase tracking-wider text-softRose">Itemized Price &amp; Tax Audit</span>
+                <span id="scanner-cloud-badge" class="hidden inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pakGreen-light text-pakGreen text-[10px] font-extrabold border border-pakGreen/20">
+                  <i class="fa-solid fa-cloud-check"></i> Saved to Cloud
+                </span>
+              </div>
+              <h3 id="receipt-store-title" class="text-lg font-extrabold text-charcoal">Sample Mart &amp; Cash Carry — Receipt #PK-8841</h3>
+              <p id="receipt-meta-subtitle" class="text-xs text-stone-500">Audited against Lahore DC Rate List &amp; Printed MRPs</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <div class="px-3 py-1.5 rounded-xl bg-cream-warm border border-cream-border text-right">
+                <span class="text-[10px] font-bold text-stone-500 block">Total Paid</span>
+                <span id="bill-total-paid" class="text-sm font-extrabold text-charcoal">Rs. 3,471</span>
+              </div>
+              <div class="px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-right">
+                <span class="text-[10px] font-bold text-amber-800 block">Hidden Tax (GST/POS)</span>
+                <span id="bill-total-tax" class="text-sm font-extrabold text-amber-900">Rs. 341</span>
+              </div>
+              <div class="px-3 py-1.5 rounded-xl bg-softRose-light border border-softRose/25 text-right">
+                <span class="text-[10px] font-bold text-softRose block">Overcharged</span>
+                <span id="bill-total-overcharge" class="text-sm font-extrabold text-softRose">Rs. 135</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Responsive Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-pakGreen text-white text-xs uppercase tracking-wider">
+                  <th class="py-3 px-3.5 rounded-tl-xl">Item Name</th>
+                  <th class="py-3 px-3">Paid (Rs.)</th>
+                  <th class="py-3 px-3">DC / MRP</th>
+                  <th class="py-3 px-3">GST Tax</th>
+                  <th class="py-3 px-3">Status</th>
+                  <th class="py-3 px-3.5 rounded-tr-xl text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="receipt-items-tbody" class="divide-y divide-cream-border text-xs sm:text-sm">
+                <!-- Populated dynamically with pre-loaded sample data -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Inline Smart Saving Suggestion Banner -->
+          <div class="bg-pakGreen-light/80 border border-pakGreen/20 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div class="flex items-start gap-3">
+              <div class="w-9 h-9 rounded-xl bg-pakGreen text-white flex items-center justify-center flex-shrink-0 mt-0.5">
+                <i class="fa-solid fa-lightbulb"></i>
+              </div>
+              <div>
+                <h4 class="text-xs font-extrabold uppercase tracking-wider text-pakGreen">Smart Bachat Recommendation</h4>
+                <p id="scanner-savings-text" class="text-xs sm:text-sm text-charcoal mt-0.5 font-medium">
+                  Save <strong>Rs. 285</strong> next time by buying Broiler Chicken &amp; Sugar at your nearest <strong>Sahulat Bazar</strong> and grabbing Cooking Oil on <strong>Imtiaz Weekend Bachat</strong>!
+                </p>
+              </div>
+            </div>
+            <button type="button" onclick="switchTab('dashboard')" class="px-3.5 py-2 rounded-xl bg-pakGreen hover:bg-pakGreen-medium text-white text-xs font-bold whitespace-nowrap shadow-xs cursor-pointer">
+              View Tax Ledger →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SASTA BAZAR NEAR ME & LIVE SALES RADAR -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Nearest Punjab Sahulat Bazaars -->
+        <div class="bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-pakGreen">Official Punjab Sahulat Bazaars</span>
+              <h3 class="text-lg font-extrabold text-charcoal">Sasta Bazars Near Me (<span class="active-city-text text-pakGreen">Lahore</span>)</h3>
+            </div>
+            <button id="detect-near-me-btn" type="button"
+              class="px-3.5 py-2 rounded-xl bg-pakGreen hover:bg-pakGreen-medium text-white text-xs font-bold shadow-xs transition-all flex items-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-location-crosshairs"></i>
+              <span>Detect Near Me</span>
+            </button>
+          </div>
+          <p class="text-xs text-stone-500">Open daily 9:00 AM – 5:00 PM • Up to 20%–25% cheaper than open retail markets.</p>
+          <div id="sasta-bazars-list" class="space-y-3">
+            <!-- Dynamically populated per selected city -->
+          </div>
+        </div>
+
+        <!-- Live Supermarket & Brand Sales Radar -->
+        <div class="bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm space-y-4">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <span class="text-xs font-extrabold uppercase tracking-wider text-softRose">Inform to Save Money</span>
+              <h3 class="text-lg font-extrabold text-charcoal">Live Supermarket &amp; Brand Sales</h3>
+            </div>
+            <span class="text-[11px] font-bold px-3 py-1 rounded-full bg-softRose-light text-softRose border border-softRose/20">
+              <i class="fa-solid fa-fire mr-1"></i>Live Today
+            </span>
+          </div>
+          <p class="text-xs text-stone-500">Active online &amp; in-store discounts across Pakistan to cut your monthly household bill.</p>
+          <div id="live-sales-list" class="space-y-3">
+            <!-- Dynamically populated live deals -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 2: QUICK PRICE CHECKER (DC RATES + BRANDED WEBSITES)            -->
+    <!-- =================================================================== -->
+    <section id="tab-chat" class="tab-panel hidden fade-in">
+      <div class="bg-cream rounded-3xl border border-pakGreen-mint shadow-sm overflow-hidden flex flex-col h-[610px]">
+        <!-- Chat Header -->
+        <div class="px-6 py-4 bg-pakGreen-light/70 border-b border-pakGreen-mint flex flex-wrap items-center justify-between gap-2">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-pakGreen text-white flex items-center justify-center font-bold shadow-xs">
+              <i class="fa-solid fa-robot"></i>
+            </div>
+            <div>
+              <h3 class="text-base font-extrabold text-charcoal">AI Quick Price &amp; Brand Website Checker</h3>
+              <p class="text-xs text-stone-600">Checks <span class="font-bold text-pakGreen active-city-text">Lahore</span> DC lists + live prices across <strong>Daraz.pk, PriceOye, Imtiaz, Metro &amp; Naheed</strong></p>
+            </div>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-cream border border-pakGreen/20 text-pakGreen">
+            Groceries &amp; Branded Products
+          </span>
+        </div>
+
+        <!-- Quick Prompt Chips -->
+        <div class="px-6 py-2.5 bg-cream-warm border-b border-cream-border flex items-center gap-2 overflow-x-auto">
+          <span class="text-xs font-bold text-stone-500 whitespace-nowrap">Try asking:</span>
+          <button type="button" class="quick-chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full bg-cream hover:bg-pakGreen hover:text-white border border-pakGreen-mint transition-colors cursor-pointer">
+            Dollar SP-10 pen Rs 40
+          </button>
+          <button type="button" class="quick-chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full bg-cream hover:bg-pakGreen hover:text-white border border-pakGreen-mint transition-colors cursor-pointer">
+            Audionic Airbud 550 Rs 4500
+          </button>
+          <button type="button" class="quick-chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full bg-cream hover:bg-pakGreen hover:text-white border border-pakGreen-mint transition-colors cursor-pointer">
+            Surf Excel 1kg Rs 620
+          </button>
+          <button type="button" class="quick-chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full bg-cream hover:bg-pakGreen hover:text-white border border-pakGreen-mint transition-colors cursor-pointer">
+            Chicken boneless 1kg Rs 680
+          </button>
+          <button type="button" class="quick-chip whitespace-nowrap text-xs font-semibold px-3 py-1.5 rounded-full bg-cream hover:bg-pakGreen hover:text-white border border-pakGreen-mint transition-colors cursor-pointer">
+            L'Oreal Hyaluronic Serum Rs 3400
+          </button>
+        </div>
+
+        <!-- Messages Stream -->
+        <div id="chat-messages" class="flex-1 overflow-y-auto p-6 space-y-4 bg-cream">
+          <div class="flex items-start gap-3 max-w-2xl">
+            <div class="w-8 h-8 rounded-full bg-pakGreen text-white flex items-center justify-center text-xs flex-shrink-0 mt-1">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div class="bg-pakGreen-light/70 border border-pakGreen/15 rounded-2xl rounded-tl-none p-4 text-sm text-charcoal space-y-1.5">
+              <p class="font-bold text-pakGreen">Assalam-o-Alaikum! Basic groceries aur BRANDED products dono ke rates check karein!</p>
+              <p>Type or speak any item &amp; price (e.g., <em>"Dollar SP-10 pen Rs 40"</em>, <em>"Audionic Airbud 550 Rs 4500"</em>, or <em>"Chicken boneless 1kg Rs 680"</em>). I'll compare it against Pakistani websites (Daraz, PriceOye, Imtiaz, Metro, Naheed) and today's DC rate list!</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <form id="chat-form" class="p-4 bg-cream-warm border-t border-cream-border flex items-center gap-2.5">
+          <button id="voice-mic-btn" type="button" title="Speak Price Query"
+            class="w-11 h-11 rounded-xl bg-softRose-light hover:bg-softRose text-softRose hover:text-white border border-softRose/25 flex items-center justify-center transition-all flex-shrink-0 cursor-pointer">
+            <i class="fa-solid fa-microphone"></i>
+          </button>
+          <input id="chat-input" type="text" autocomplete="off"
+            placeholder="Type any grocery or branded item + price (e.g. Audionic Airbud 550 Rs 4500)..."
+            class="flex-1 bg-cream border border-pakGreen-mint focus:border-pakGreen rounded-xl px-4 py-3 text-sm text-charcoal focus:outline-none" />
+          <button type="submit"
+            class="px-5 py-3 rounded-xl bg-pakGreen hover:bg-pakGreen-medium text-white font-bold text-sm shadow-xs transition-all flex items-center gap-2 cursor-pointer">
+            <span>Check</span>
+            <i class="fa-solid fa-paper-plane"></i>
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 3: TAX & SMART BACHAT LEDGER                                    -->
+    <!-- =================================================================== -->
+    <section id="tab-dashboard" class="tab-panel hidden space-y-6 fade-in">
+      <!-- Cloud Sync Status Banner -->
+      <div class="bg-cream rounded-2xl border border-pakGreen-mint px-5 py-3 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
+          <span class="text-xs font-extrabold text-pakGreen" id="ledger-sync-status">Firebase Cloud Synced • Personal Citizen Vault Active</span>
+        </div>
+        <div class="text-[11px] font-semibold text-stone-500">
+          Citizen Account: <strong id="ledger-citizen-owner" class="text-charcoal">Guest / Demo Citizen</strong>
+        </div>
+      </div>
+
+      <!-- 4 Colorful KPI Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-cream rounded-3xl border border-pakGreen-mint p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-stone-500 uppercase">Total Monthly Spend</span>
+            <span class="w-9 h-9 rounded-xl bg-pakGreen-light text-pakGreen flex items-center justify-center"><i class="fa-solid fa-wallet"></i></span>
+          </div>
+          <p id="kpi-total-spend" class="text-2xl font-extrabold text-charcoal mt-3">Rs. 42,850</p>
+          <p class="text-[11px] text-pakGreen font-semibold mt-1">Synced from scanned bills</p>
+        </div>
+
+        <div class="bg-cream rounded-3xl border border-amber-200 p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-stone-500 uppercase">Hidden Taxes Paid</span>
+            <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center"><i class="fa-solid fa-landmark"></i></span>
+          </div>
+          <p id="kpi-total-tax" class="text-2xl font-extrabold text-amber-900 mt-3">Rs. 5,420</p>
+          <p class="text-[11px] text-amber-700 font-semibold mt-1">18% GST + FBR POS Fees</p>
+        </div>
+
+        <div class="bg-cream rounded-3xl border border-softRose/30 p-5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-stone-500 uppercase">Overcharges Caught</span>
+            <span class="w-9 h-9 rounded-xl bg-softRose-light text-softRose flex items-center justify-center"><i class="fa-solid fa-triangle-exclamation"></i></span>
+          </div>
+          <p id="kpi-total-overcharge" class="text-2xl font-extrabold text-softRose mt-3">Rs. 1,680</p>
+          <p class="text-[11px] text-softRose font-semibold mt-1">Above DC &amp; MRP Rates</p>
+        </div>
+
+        <div class="bg-pakGreen rounded-3xl p-5 shadow-sm text-white">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-200 uppercase">Total Bachat Saved</span>
+            <span class="w-9 h-9 rounded-xl bg-white/15 text-white flex items-center justify-center"><i class="fa-solid fa-piggy-bank"></i></span>
+          </div>
+          <p id="kpi-total-saved" class="text-2xl font-extrabold text-white mt-3">Rs. 3,950</p>
+          <p class="text-[11px] text-emerald-200 font-semibold mt-1">Via Sahulat Bazars &amp; Sales</p>
+        </div>
+      </div>
+
+      <!-- Visual Spend Breakdown + Personalized Smart Bachat Tips -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-6 bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm space-y-5">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-pakGreen">Tax Transparency Breakdown</span>
+            <h3 class="text-lg font-extrabold text-charcoal">Where Your Money Actually Went</h3>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1.5">
+                <span class="text-charcoal">Actual Goods &amp; Groceries Value</span>
+                <span id="bar-goods-label" class="text-pakGreen">Rs. 35,750 (83.4%)</span>
+              </div>
+              <div class="w-full h-4 bg-cream-warm rounded-full overflow-hidden border border-cream-border">
+                <div id="bar-goods-fill" class="h-full bg-pakGreen rounded-full" style="width: 83.4%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1.5">
+                <span class="text-charcoal">Government Taxes (GST &amp; Withholding)</span>
+                <span id="bar-tax-label" class="text-amber-800">Rs. 5,420 (12.7%)</span>
+              </div>
+              <div class="w-full h-4 bg-cream-warm rounded-full overflow-hidden border border-cream-border">
+                <div id="bar-tax-fill" class="h-full bg-amber-500 rounded-full" style="width: 12.7%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs font-bold mb-1.5">
+                <span class="text-charcoal">Illegal Shopkeeper Overcharging</span>
+                <span id="bar-overcharge-label" class="text-softRose">Rs. 1,680 (3.9%)</span>
+              </div>
+              <div class="w-full h-4 bg-cream-warm rounded-full overflow-hidden border border-cream-border">
+                <div id="bar-overcharge-fill" class="h-full bg-softRose rounded-full" style="width: 6%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-cream-warm border border-cream-border text-xs text-stone-600 flex items-center justify-between">
+            <span>Manage your personal cloud transaction log:</span>
+            <button type="button" onclick="resetLedger()" class="px-3 py-1.5 rounded-lg bg-cream border border-stone-300 hover:border-softRose text-charcoal font-bold cursor-pointer">
+              Reset Demo Data
+            </button>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm space-y-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-softRose">AI Savings Advisor</span>
+            <h3 class="text-lg font-extrabold text-charcoal">3 Personalized Smart Bachat Tips</h3>
+          </div>
+          <div id="bachat-tips-list" class="space-y-3">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Real-Time Cloud Transaction History Table -->
+      <div class="bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-pakGreen">Live Cloud Database Records</span>
+            <h3 class="text-lg font-extrabold text-charcoal">My Audited Receipts &amp; Purchase History</h3>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-pakGreen-light text-pakGreen" id="tx-count-badge">0 Records Synced</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-pakGreen text-white text-xs uppercase tracking-wider">
+                <th class="py-3 px-3.5 rounded-tl-xl">Date</th>
+                <th class="py-3 px-3">Description / Store</th>
+                <th class="py-3 px-3">Paid (Rs.)</th>
+                <th class="py-3 px-3">Tax (GST)</th>
+                <th class="py-3 px-3">Overcharge</th>
+                <th class="py-3 px-3">Saved</th>
+                <th class="py-3 px-3.5 rounded-tr-xl text-right">Manage</th>
+              </tr>
+            </thead>
+            <tbody id="cloud-transactions-tbody" class="divide-y divide-cream-border">
+              <!-- Populated live from Firestore / Cloud state -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================== -->
+    <!-- TAB 4: AI COMPLAINT DRAFTER & AUTHORITY ROUTER                      -->
+    <!-- =================================================================== -->
+    <section id="tab-complaint" class="tab-panel hidden space-y-6 fade-in">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Left Incident Form -->
+        <div class="lg:col-span-5 bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm space-y-4">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-softRose">Consumer Protection Act 2005</span>
+            <h3 class="text-xl font-extrabold text-charcoal mt-1">AI Bilingual Complaint Drafter</h3>
+            <p class="text-xs text-stone-500 mt-1">Auto-fills your Citizen Profile details, generates English &amp; Urdu notices, and saves reports to your cloud history.</p>
+          </div>
+
+          <div class="space-y-3">
+            <div>
+              <label for="complaint-type" class="block text-xs font-bold text-charcoal mb-1">Violation / Issue Type</label>
+              <select id="complaint-type" class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm font-semibold text-charcoal focus:outline-none focus:border-pakGreen">
+                <option value="dc_overcharge">Essential Commodity Overpricing (Above DC List)</option>
+                <option value="mrp_breach">Branded Item Sold Above Printed MRP / Expired</option>
+                <option value="fake_pos">GST Charged but Fake / Unregistered FBR POS Receipt</option>
+                <option value="food_hygiene">Unhygienic / Adulterated Food or Bakery</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="complaint-shop" class="block text-xs font-bold text-charcoal mb-1">Shop / Mart Name &amp; Area</label>
+              <input id="complaint-shop" type="text" value="Al-Madina Cash & Carry, Model Town Link Road, Lahore"
+                class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm text-charcoal focus:outline-none focus:border-pakGreen" />
+            </div>
+
+            <div>
+              <label for="complaint-details" class="block text-xs font-bold text-charcoal mb-1">Incident &amp; Overcharge Details</label>
+              <textarea id="complaint-details" rows="3"
+                class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm text-charcoal focus:outline-none focus:border-pakGreen">Shopkeeper charged Rs. 695/kg for Broiler Chicken Meat against the official DC notified rate of Rs. 595/kg (Overcharged Rs. 100) and Rs. 165/kg for Sugar instead of Rs. 147.50/kg.</textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <button id="generate-complaint-btn" type="button"
+                class="py-3 px-3 rounded-xl bg-pakGreen hover:bg-pakGreen-medium text-white font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-file-signature"></i>
+                <span>Update Legal Drafts</span>
+              </button>
+              <button id="save-complaint-cloud-btn" type="button"
+                class="py-3 px-3 rounded-xl bg-softRose hover:bg-pink-700 text-white font-bold text-xs shadow-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Save to My Complaints</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER WITH ALISHBATECHWORLD CREDIT -->
+  <footer class="bg-cream border-t border-pakGreen-mint py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-stone-500">
+      <p><strong class="text-pakGreen">Haq-e-Sarif (حقِ صارف)</strong> — Empowering Pakistani Consumers with AI Transparency.</p>
+      <p>Helplines: <strong>0800-02345</strong> (Price Control) • <strong>1223</strong> (Punjab Food Authority) • <strong>FBR Tax Asaan</strong></p>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-2.5 mt-2.5 border-t border-cream-border text-center">
+      <p class="text-xs font-semibold text-stone-500">
+        made by <span class="text-pakGreen font-extrabold">AlishbaTechWorld</span> <span class="text-softRose">♥</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- LIVE AUTOMATED DC RATE LIST MODAL -->
+  <div id="dc-modal" class="fixed inset-0 z-50 hidden bg-charcoal/50 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-cream rounded-3xl border border-pakGreen-mint max-w-2xl w-full p-6 shadow-xl space-y-4 fade-in">
+      <div class="flex items-center justify-between border-b border-cream-border pb-3">
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-pakGreen">
+            Automated Scraper • Updated <span id="modal-dc-date-time">18 Nov 2026, 09:00 AM PKT</span>
+          </span>
+          <h3 class="text-lg font-extrabold text-charcoal">Today's Official DC Rate List — <span class="active-city-text text-pakGreen">Lahore</span></h3>
+        </div>
+        <button id="close-dc-modal-btn" type="button" class="w-9 h-9 rounded-full bg-cream-warm hover:bg-softRose-light text-charcoal hover:text-softRose flex items-center justify-center cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead>
+            <tr class="bg-pakGreen text-white">
+              <th class="py-2.5 px-3 rounded-tl-xl">Essential Commodity</th>
+              <th class="py-2.5 px-3">Unit</th>
+              <th class="py-2.5 px-3">Notified DC Rate</th>
+              <th class="py-2.5 px-3 rounded-tr-xl">Source Portal</th>
+            </tr>
+          </thead>
+          <tbody id="dc-modal-tbody" class="divide-y divide-cream-border"></tbody>
+        </table>
+      </div>
+      <div class="flex items-center justify-between pt-2">
+        <span class="text-[11px] text-stone-500"><i class="fa-solid fa-check-circle text-pakGreen mr-1"></i>Zero manual upload required — AI Vision OCR parses daily PDFs automatically.</span>
+        <button id="force-resync-btn" type="button" class="px-4 py-2 rounded-xl bg-pakGreen text-white text-xs font-bold cursor-pointer">
+          <i class="fa-solid fa-rotate mr-1"></i>Re-Sync Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast-box" class="fixed bottom-5 right-5 z-50 hidden bg-pakGreen text-white px-4 py-3 rounded-2xl shadow-lg text-xs font-bold flex items-center gap-2">
+    <i class="fa-solid fa-circle-check text-emerald-300"></i>
+    <span id="toast-message">Action completed!</span>
+  </div>
+
+  <!-- APPLICATION SCRIPT -->
+  <script>
+    // 1. DATA REPOSITORIES
+    const PUNJAB_DC_RATES = {
+      Lahore: {
+        domain: 'lahore.punjab.gov.pk',
+        items: [
+          { name: 'Wheat Flour (Atta Bag)', unit: '10 kg', rate: 905 },
+          { name: 'White Sugar (Cheeni)', unit: '1 kg', rate: 147.5 },
+          { name: 'Broiler Chicken Meat', unit: '1 kg', rate: 595 },
+          { name: 'Farm Eggs', unit: '1 Dozen', rate: 310 },
+          { name: 'Daal Chana (Special)', unit: '1 kg', rate: 285 },
+          { name: 'Onion (Grade A)', unit: '1 kg', rate: 115 },
+          { name: 'Tomato (Grade A)', unit: '1 kg', rate: 95 },
+        ],
+      },
+      Rawalpindi: {
+        domain: 'rawalpindi.punjab.gov.pk',
+        items: [
+          { name: 'Wheat Flour (Atta Bag)', unit: '10 kg', rate: 915 },
+          { name: 'White Sugar (Cheeni)', unit: '1 kg', rate: 149 },
+          { name: 'Broiler Chicken Meat', unit: '1 kg', rate: 605 },
+          { name: 'Farm Eggs', unit: '1 Dozen', rate: 315 },
+          { name: 'Daal Chana (Special)', unit: '1 kg', rate: 290 },
+        ],
+      },
+      Faisalabad: {
+        domain: 'faisalabad.punjab.gov.pk',
+        items: [
+          { name: 'Wheat Flour (Atta Bag)', unit: '10 kg', rate: 895 },
+          { name: 'White Sugar (Cheeni)', unit: '1 kg', rate: 146 },
+          { name: 'Broiler Chicken Meat', unit: '1 kg', rate: 585 },
+          { name: 'Farm Eggs', unit: '1 Dozen', rate: 305 },
+        ],
+      },
+      Multan: {
+        domain: 'multan.punjab.gov.pk',
+        items: [
+          { name: 'Wheat Flour (Atta Bag)', unit: '10 kg', rate: 890 },
+          { name: 'White Sugar (Cheeni)', unit: '1 kg', rate: 145 },
+          { name: 'Broiler Chicken Meat', unit: '1 kg', rate: 580 },
+          { name: 'Farm Eggs', unit: '1 Dozen', rate: 300 },
+        ],
+      },
+      Gujranwala: {
+        domain: 'gujranwala.punjab.gov.pk',
+        items: [
+          { name: 'Wheat Flour (Atta Bag)', unit: '10 kg', rate: 900 },
+          { name: 'White Sugar (Cheeni)', unit: '1 kg', rate: 147 },
+          { name: 'Broiler Chicken Meat', unit: '1 kg', rate: 590 },
+          { name: 'Farm Eggs', unit: '1 Dozen', rate: 308 },
+        ],
+      },
+    };
+
+    const BRANDED_WEBSITE_CATALOG = [
+      {
+        keywords: ['sp-10', 'sp10', 'dollar', 'pen'],
+        name: 'Dollar SP-10 Fountain Pen',
+        category: 'Stationery',
+        mrp: 75,
+        stores: [
+          { store: 'Daraz.pk Official', price: 65, tag: 'Cheapest Online' },
+          { store: 'Imtiaz Super Market', price: 68, tag: 'In-Store Deal' },
+          { store: 'Al-Fatah Stationery', price: 75, tag: 'Printed MRP' },
+        ],
+        tip: 'Buying a 10-pack box on Daraz drops the unit price to ~Rs. 58/pen.',
+      },
+      {
+        keywords: ['audionic', 'airbud', 'earbud', '550'],
+        name: 'Audionic Airbud 550 Wireless Earbuds',
+        category: 'Electronics & Audio',
+        mrp: 4999,
+        stores: [
+          { store: 'PriceOye.pk', price: 3699, tag: 'Cheapest Verified' },
+          { store: 'Daraz.pk Flagship', price: 3849, tag: '1-Yr Warranty' },
+          { store: 'Audionic Official', price: 3999, tag: 'Official Store' },
+        ],
+        tip: 'PriceOye & Daraz Flagship list it under Rs. 3,850 — saving Rs. 800+ over local mobile shops.',
+      },
+      {
+        keywords: ['surf', 'excel', 'detergent'],
+        name: 'Surf Excel Matic / Handwash (1 kg)',
+        category: 'Household & Laundry',
+        mrp: 610,
+        stores: [
+          { store: 'Imtiaz Weekend Bachat', price: 545, tag: 'Cheapest Deal (-11%)' },
+          { store: 'Metro Cash & Carry', price: 560, tag: 'Bulk Promo' },
+          { store: 'Daraz Mart', price: 585, tag: 'Free Delivery' },
+        ],
+        tip: 'Imtiaz Super Market is running a Weekend Bachat deal saving Rs. 65 per kg.',
+      },
+      {
+        keywords: ['loreal', "l'oreal", 'serum', 'hyaluronic'],
+        name: "L'Oreal Paris Hyaluronic Acid Serum (30ml)",
+        category: 'Cosmetics & Skincare',
+        mrp: 3450,
+        stores: [
+          { store: 'Naheed.pk', price: 2760, tag: '20% Off Live Sale' },
+          { store: 'Al-Fatah Beauty', price: 2890, tag: '16% Off Promo' },
+          { store: 'Daraz Mall Official', price: 2950, tag: 'Authentic Seal' },
+        ],
+        tip: 'Naheed.pk & Al-Fatah regularly offer 15%–20% flat skincare discounts below printed MRP.',
+      },
+      {
+        keywords: ['chicken', 'boneless', 'murghi'],
+        name: 'Broiler Chicken Meat (1 kg)',
+        category: 'Daily Essential (DC List)',
+        mrp: 595,
+        stores: [
+          { store: 'Punjab Sahulat Bazar', price: 580, tag: 'Subsidized Rate' },
+          { store: 'Official DC Rate List', price: 595, tag: 'Govt Notified Max' },
+          { store: 'Open Retail Market', price: 680, tag: 'Overcharged!' },
+        ],
+        tip: 'Never pay above the daily DC notified rate — report overcharging on Qeemat Punjab (0800-02345).',
+      },
+    ];
+
+    const CITY_SASTA_BAZARS = {
+      Lahore: [
+        { name: 'Township Model Sahulat Bazar', area: 'College Road, Township', distance: '2.1 km', savings: '22% Cheaper', items: 'Fresh Sabzi, Chicken, Flour & Sugar at DC Rates' },
+        { name: 'Shadman Sunday & Model Bazar', area: 'Shadman / Ichhra', distance: '3.4 km', savings: '24% Cheaper', items: 'Farm-Direct Produce, Eggs, Meat & Daily Groceries' },
+        { name: 'Wahdat Colony Sahulat Bazar', area: 'Wahdat Road / Iqbal Town', distance: '4.1 km', savings: '19% Cheaper', items: 'Verified Digital Scales & Zero Overcharging Guarantee' },
+      ],
+      Rawalpindi: [
+        { name: 'Committee Chowk Sahulat Bazar', area: 'Murree Road, Rawalpindi', distance: '1.8 km', savings: '21% Cheaper', items: 'Fresh Sabzi, Poultry & Subsidized Atta' },
+        { name: 'Chaklala Scheme III Model Bazar', area: 'Airport Road, Chaklala', distance: '3.2 km', savings: '19% Cheaper', items: 'Fruits, Pulses, Dairy & Household Staples' },
+      ],
+      Faisalabad: [
+        { name: 'Millat Road Model Sahulat Bazar', area: 'Millat Road / Dhanola', distance: '2.4 km', savings: '22% Cheaper', items: 'Atta, Sugar, Poultry & Seasonal Produce' },
+        { name: 'Jhang Road Sahulat Bazar', area: 'Jhang Road, Faisalabad', distance: '3.7 km', savings: '20% Cheaper', items: 'Fruits, Vegetables, Daal & Cooking Oil' },
+      ],
+      Multan: [
+        { name: 'Shah Rukn-e-Alam Sahulat Bazar', area: 'Shah Rukn-e-Alam Colony', distance: '2.0 km', savings: '23% Cheaper', items: 'Farm Produce, Fruits, Flour & Poultry' },
+        { name: 'MDA Chowk Model Bazar', area: 'MDA Road / Cantt', distance: '3.1 km', savings: '19% Cheaper', items: 'Daily Kitchen Essentials & Verified DC Rates' },
+      ],
+      Gujranwala: [
+        { name: 'Peoples Colony Sahulat Bazar', area: 'Kashmir Road, Gujranwala', distance: '2.3 km', savings: '21% Cheaper', items: 'Subsidized Atta, Chicken, Vegetables & Pulses' },
+        { name: 'GT Road Model Bazar', area: 'Near Gondlanwala Chowk', distance: '3.8 km', savings: '20% Cheaper', items: 'Wholesale Grocery Rates for Households' },
+      ],
+    };
+
+    const LIVE_SALES_RADAR = [
+      {
+        store: 'Imtiaz Super Market — Weekend Bachat',
+        discount: 'Up to 25% OFF',
+        valid: 'Ends Sunday 11:59 PM',
+        detail: 'Surf Excel 1kg @ Rs. 545, Tapal Danedar 900g @ Rs. 1,465 & Cooking Oil combo packs.',
+      },
+      {
+        store: 'PriceOye.pk & Daraz Mall — Tech Flash Sale',
+        discount: 'Up to 32% OFF',
+        valid: '48 Hours Left',
+        detail: 'Audionic Airbud 550 @ Rs. 3,699, Ronin Handsfree & Power Banks with 1-year official warranty.',
+      },
+      {
+        store: 'Metro Cash & Carry — Bulk Ration Promo',
+        discount: 'Flat 18% OFF',
+        valid: 'Live This Week',
+        detail: 'Buy 2+ packs of Super Kernel Basmati Rice, Daal Chana & Detergents at wholesale rates.',
+      },
+      {
+        store: "Naheed.pk & Al-Fatah — Skincare & Care Fest",
+        discount: 'Flat 20% OFF',
+        valid: 'Ends Friday',
+        detail: "L'Oreal Hyaluronic Serum @ Rs. 2,760, Garnier & Dove authentic products below printed MRP.",
+      },
+    ];
+
+    const SAMPLE_RECEIPT_ITEMS = [
+      { name: 'Wheat Flour (Atta 10kg)', paid: 905, official: 905, gst: 0 },
+      { name: 'White Sugar (2 kg)', paid: 330, official: 295, gst: 0 },
+      { name: 'Broiler Chicken Meat (1 kg)', paid: 695, official: 595, gst: 0 },
+      { name: 'Dalda Cooking Oil (1L Pouch)', paid: 540, official: 540, gst: 82 },
+      { name: 'Surf Excel Detergent (1 kg)', paid: 610, official: 610, gst: 93 },
+      { name: '18% GST & FBR Tier-1 POS Fee', paid: 166, official: 166, gst: 166 },
+    ];
+
+    // 2. STATE & INITIALIZATION
+    const state = {
+      city: 'Lahore',
+      ledger: JSON.parse(localStorage.getItem('haq_e_sarif_ledger') || 'null') || {
+        spend: 42850,
+        tax: 5420,
+        overcharge: 1680,
+        saved: 3950,
+      },
+    };
+
+    function showToast(msg) {
+      const box = document.getElementById('toast-box');
+      document.getElementById('toast-message').textContent = msg;
+      box.classList.remove('hidden');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => box.classList.add('hidden'), 3000);
+    }
+
+    // 3. TAB SWITCHING
+    function switchTab(tabKey) {
+      document.querySelectorAll('.tab-panel').forEach((p) => p.classList.add('hidden'));
+      document.getElementById(`tab-${tabKey}`).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-tab').forEach((btn) => {
+        const isActive = btn.dataset.tab === tabKey;
+        btn.className = isActive
+          ? 'nav-tab flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer bg-pakGreen text-white shadow-sm'
+          : 'nav-tab flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer text-charcoal hover:bg-pakGreen-light';
+      });
+    }
+
+    document.querySelectorAll('.nav-tab').forEach((btn) => {
+      btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+    });
+
+    // DYNAMIC TODAY'S DATE & AUTO-SYNC TIMESTAMP
+    function formatTodaySyncTimestamp(useCurrentClock = false) {
+      const now = new Date();
+      const datePart = now.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      });
+      if (!useCurrentClock) {
+        return `${datePart}, 09:00 AM PKT`;
+      }
+      const timePart = now.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      });
+      return `${datePart}, ${timePart} PKT`;
+    }
+
+    function updateDailySyncDateBadges(useCurrentClock = false) {
+      const formatted = formatTodaySyncTimestamp(useCurrentClock);
+      const headerBadge = document.getElementById('live-dc-date-time');
+      const modalBadge = document.getElementById('modal-dc-date-time');
+      if (headerBadge) headerBadge.textContent = formatted;
+      if (modalBadge) modalBadge.textContent = formatted;
+    }
+
+    // 4. CITY SWITCHER & DC MODAL
+    function updateCityUI() {
+      const cityObj = PUNJAB_DC_RATES[state.city] || PUNJAB_DC_RATES.Lahore;
+      document.getElementById('header-portal-domain').textContent = cityObj.domain;
+      document.getElementById('hero-city-label').textContent = state.city;
+      document.querySelectorAll('.active-city-text').forEach((el) => (el.textContent = state.city));
+
+      // Populate DC Modal Table
+      document.getElementById('dc-modal-tbody').innerHTML = cityObj.items
+        .map(
+          (item) => `
+        <tr class="hover:bg-cream-warm">
+          <td class="py-2.5 px-3 font-bold text-charcoal">${item.name}</td>
+          <td class="py-2.5 px-3 text-stone-600">${item.unit}</td>
+          <td class="py-2.5 px-3 font-extrabold text-pakGreen">Rs. ${item.rate}</td>
+          <td class="py-2.5 px-3 text-[11px] text-stone-500">${cityObj.domain}</td>
+        </tr>
+      `
+        )
+        .join('');
+
+      renderSastaBazarsAndSales();
+      renderDashboard();
+    }
+
+    document.getElementById('city-selector').addEventListener('change', (e) => {
+      state.city = e.target.value;
+      updateCityUI();
+      showToast(`Switched to ${state.city} DC Rate List & Sahulat Bazaars!`);
+    });
+
+    document.getElementById('open-dc-modal-btn').addEventListener('click', () => {
+      document.getElementById('dc-modal').classList.remove('hidden');
+    });
+    document.getElementById('close-dc-modal-btn').addEventListener('click', () => {
+      document.getElementById('dc-modal').classList.add('hidden');
+    });
+    document.getElementById('force-resync-btn').addEventListener('click', () => {
+      updateDailySyncDateBadges(true);
+      showToast(`Re-synced live ${state.city} DC rates (${formatTodaySyncTimestamp(true)})!`);
+    });
+
+    // 5. RECEIPT SCANNER & AUDIT TABLE
+    function renderReceiptAudit(items, storeTitle = 'Sample Mart & Cash Carry — Receipt #PK-8841') {
+      document.getElementById('receipt-store-title').textContent = storeTitle;
+      let totalPaid = 0;
+      let totalTax = 0;
+      let totalOver = 0;
+
+      const rowsHtml = items
+        .map((item) => {
+          totalPaid += item.paid;
+          totalTax += item.gst;
+          const diff = item.paid - item.official;
+          if (diff > 0) totalOver += diff;
+
+          const statusBadge =
+            diff > 0
+              ? `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-softRose-light text-softRose text-[11px] font-extrabold"><i class="fa-solid fa-arrow-trend-up"></i>Overcharged +Rs. ${diff}</span>`
+              : `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-pakGreen-light text-pakGreen text-[11px] font-extrabold"><i class="fa-solid fa-check"></i>Fair Price</span>`;
+
+          const actionBtn =
+            diff > 0
+              ? `<button type="button" onclick="prefillComplaint('${item.name.replace(/'/g, "\\'")}', ${item.paid}, ${item.official})"
+                  class="px-2.5 py-1 rounded-lg bg-softRose hover:bg-pink-700 text-white text-[11px] font-bold cursor-pointer">
+                  Report Overcharge
+                </button>`
+              : `<span class="text-[11px] text-stone-400">Verified</span>`;
+
+          return `
+            <tr class="${diff > 0 ? 'bg-softRose-light/30' : 'hover:bg-cream-warm'}">
+              <td class="py-3 px-3.5 font-bold text-charcoal">${item.name}</td>
+              <td class="py-3 px-3 font-extrabold text-charcoal">Rs. ${item.paid}</td>
+              <td class="py-3 px-3 text-stone-600">Rs. ${item.official}</td>
+              <td class="py-3 px-3 text-amber-800 font-semibold">${item.gst > 0 ? 'Rs. ' + item.gst : '—'}</td>
+              <td class="py-3 px-3">${statusBadge}</td>
+              <td class="py-3 px-3.5 text-right">${actionBtn}</td>
+            </tr>
+          `;
+        })
+        .join('');
+
+      document.getElementById('receipt-items-tbody').innerHTML = rowsHtml;
+      document.getElementById('bill-total-paid').textContent = `Rs. ${totalPaid.toLocaleString()}`;
+      document.getElementById('bill-total-tax').textContent = `Rs. ${totalTax.toLocaleString()}`;
+      document.getElementById('bill-total-overcharge').textContent = `Rs. ${totalOver.toLocaleString()}`;
+    }
+
+    document.getElementById('try-sample-btn').addEventListener('click', () => {
+      renderReceiptAudit(SAMPLE_RECEIPT_ITEMS, 'Al-Fatah / Metro Sample Grocery Receipt #PK-9012');
+      state.ledger.spend += 3246;
+      state.ledger.tax += 341;
+      state.ledger.overcharge += 135;
+      localStorage.setItem('haq_e_sarif_ledger', JSON.stringify(state.ledger));
+      renderDashboard();
+      showToast('Sample Pakistani receipt audited! Caught Rs. 135 overcharging & Rs. 341 GST.');
+    });
+
+    document.getElementById('receipt-file-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      renderReceiptAudit(SAMPLE_RECEIPT_ITEMS, `Uploaded Bill: ${file.name}`);
+      showToast(`AI OCR scanned "${file.name}" against ${state.city} DC rates!`);
+    });
+
+    function prefillComplaint(itemName, paid, official) {
+      document.getElementById('complaint-type').value = 'dc_overcharge';
+      document.getElementById('complaint-details').value =
+        `Shopkeeper charged Rs. ${paid} for ${itemName} against the official notified DC/MRP rate of Rs. ${official} (Illegal overcharge of Rs. ${paid - official}) in ${state.city}.`;
+      updateComplaintDrafts();
+      switchTab('complaint');
+      showToast(`Pre-filled legal complaint for ${itemName}!`);
+    }
+
+    // 6. SASTA BAZARS & LIVE SALES
+    function renderSastaBazarsAndSales() {
+      const bazars = CITY_SASTA_BAZARS[state.city] || CITY_SASTA_BAZARS.Lahore;
+      document.getElementById('sasta-bazars-list').innerHTML = bazars
+        .map(
+          (b) => `
+        <div class="p-3.5 rounded-2xl bg-cream-warm border border-pakGreen-mint hover:border-pakGreen transition-all flex items-start justify-between gap-3">
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <h4 class="text-xs font-extrabold text-charcoal">${b.name}</h4>
+              <span class="px-2 py-0.5 rounded-full bg-pakGreen-light text-pakGreen text-[10px] font-extrabold">${b.savings}</span>
+            </div>
+            <p class="text-[11px] font-semibold text-pakGreen-medium"><i class="fa-solid fa-location-dot mr-1"></i>${b.area} • <strong>${b.distance} away</strong></p>
+            <p class="text-[11px] text-stone-600">${b.items}</p>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b.name + ' ' + state.city)}" target="_blank" rel="noopener noreferrer"
+            class="px-2.5 py-1.5 rounded-xl bg-pakGreen-light hover:bg-pakGreen text-pakGreen hover:text-white text-[11px] font-bold whitespace-nowrap transition-colors">
+            <i class="fa-solid fa-diamond-turn-right mr-1"></i>Map
+          </a>
+        </div>
+      `
+        )
+        .join('');
+
+      document.getElementById('live-sales-list').innerHTML = LIVE_SALES_RADAR.map(
+        (sale) => `
+        <div class="p-3.5 rounded-2xl bg-cream-warm border border-softRose/20 hover:border-softRose transition-all flex items-start justify-between gap-3">
+          <div class="space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <h4 class="text-xs font-extrabold text-charcoal">${sale.store}</h4>
+              <span class="px-2 py-0.5 rounded-full bg-softRose-light text-softRose text-[10px] font-extrabold">${sale.discount}</span>
+            </div>
+            <p class="text-[11px] text-stone-600">${sale.detail}</p>
+            <p class="text-[10px] font-bold text-amber-800"><i class="fa-regular fa-clock mr-1"></i>${sale.valid}</p>
+          </div>
+          <button type="button" onclick="showToast('Saved ${sale.store} sale alert!')"
+            class="px-2.5 py-1.5 rounded-xl bg-softRose-light hover:bg-softRose text-softRose hover:text-white text-[11px] font-bold whitespace-nowrap transition-colors cursor-pointer">
+            Save
+          </button>
+        </div>
+      `
+      ).join('');
+    }
+
+    document.getElementById('detect-near-me-btn').addEventListener('click', () => {
+      showToast(`Located nearest Sahulat Bazaars in ${state.city}!`);
+    });
+
+    // 7. QUICK PRICE CHECKER CHAT
+    function appendChatMessage(html, sender) {
+      const container = document.getElementById('chat-messages');
+      const wrapper = document.createElement('div');
+      wrapper.className = sender === 'user' ? 'flex justify-end' : 'flex items-start gap-3 max-w-2xl';
+      wrapper.innerHTML =
+        sender === 'user'
+          ? `<div class="bg-pakGreen text-white rounded-2xl rounded-tr-none px-4 py-3 text-sm font-medium shadow-2xs max-w-md">${html}</div>`
+          : `<div class="w-8 h-8 rounded-full bg-pakGreen text-white flex items-center justify-center text-xs flex-shrink-0 mt-1"><i class="fa-solid fa-scale-balanced"></i></div>
+             <div class="bg-cream-warm border border-pakGreen-mint rounded-2xl rounded-tl-none p-4 text-sm text-charcoal space-y-2 shadow-2xs">${html}</div>`;
+      container.appendChild(wrapper);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function evaluatePriceQuery(query) {
+      const q = query.toLowerCase();
+      const priceMatch = q.match(/(\d+(?:,\d+)?)/);
+      const userPrice = priceMatch ? parseInt(priceMatch[1].replace(/,/g, ''), 10) : null;
+
+      for (const prod of BRANDED_WEBSITE_CATALOG) {
+        if (prod.keywords.some((k) => q.includes(k))) {
+          const cheapest = prod.stores.reduce((m, s) => (s.price < m.price ? s : m), prod.stores[0]);
+          const cards = prod.stores
+            .map(
+              (s) => `
+            <div class="flex items-center justify-between p-2.5 rounded-xl bg-cream border ${
+              s.price === cheapest.price ? 'border-pakGreen bg-pakGreen-light/50' : 'border-cream-border'
+            }">
+              <div>
+                <span class="text-xs font-bold text-charcoal block">${s.store}</span>
+                <span class="text-[10px] font-semibold ${s.price === cheapest.price ? 'text-pakGreen' : 'text-stone-500'}">${s.tag}</span>
+              </div>
+              <span class="text-xs font-extrabold text-pakGreen">Rs. ${s.price.toLocaleString()}</span>
+            </div>
+          `
+            )
+            .join('');
+
+          let badge = `<span class="inline-block px-2.5 py-0.5 rounded-full bg-pakGreen-light text-pakGreen text-xs font-extrabold">LIVE PAKISTANI STORE &amp; DC CHECK</span>`;
+          let msg = `<p><strong>${prod.name}</strong> (${prod.category}) — Official MRP / DC Rate: <strong>Rs. ${prod.mrp.toLocaleString()}</strong>.</p>`;
+
+          if (userPrice) {
+            if (userPrice <= cheapest.price) {
+              badge = `<span class="inline-block px-2.5 py-0.5 rounded-full bg-pakGreen-light text-pakGreen text-xs font-extrabold">FAIR DEAL — BELOW ONLINE &amp; MRP!</span>`;
+              msg = `<p><strong>${prod.name}:</strong> Paying <strong>Rs. ${userPrice.toLocaleString()}</strong> is a great price! You saved <strong>Rs. ${(prod.mrp - userPrice).toLocaleString()}</strong> below MRP.</p>`;
+            } else if (userPrice > prod.mrp) {
+              badge = `<span class="inline-block px-2.5 py-0.5 rounded-full bg-softRose-light text-softRose text-xs font-extrabold">OVERPRICED (+Rs. ${(userPrice - prod.mrp).toLocaleString()})</span>`;
+              msg = `<p><strong>${prod.name}:</strong> Rs. ${userPrice.toLocaleString()} is <strong>Rs. ${(userPrice - prod.mrp).toLocaleString()} higher</strong> than the official rate (Rs. ${prod.mrp.toLocaleString()})!</p>`;
+            }
+          }
+
+          return `${badge}${msg}<div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">${cards}</div><p class="text-xs text-stone-600 pt-1"><strong>Smart Bachat Tip:</strong> ${prod.tip}</p>`;
+        }
+      }
+
+      return `<p><strong>${state.city} AI Check:</strong> Try asking with an item &amp; price like <em>"Dollar SP-10 pen Rs 40"</em>, <em>"Audionic Airbud 550 Rs 4500"</em>, or <em>"Chicken boneless 1kg Rs 680"</em> to see live Pakistani store comparisons!</p>`;
+    }
+
+    document.getElementById('chat-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      const val = input.value.trim();
+      if (!val) return;
+      appendChatMessage(val, 'user');
+      input.value = '';
+      setTimeout(() => appendChatMessage(evaluatePriceQuery(val), 'ai'), 200);
+    });
+
+    document.querySelectorAll('.quick-chip').forEach((chip) => {
+      chip.addEventListener('click', () => {
+        const text = chip.textContent.trim();
+        appendChatMessage(text, 'user');
+        setTimeout(() => appendChatMessage(evaluatePriceQuery(text), 'ai'), 200);
+      });
+    });
+
+    document.getElementById('voice-mic-btn').addEventListener('click', () => {
+      const sampleVoiceQuery = 'Dollar SP-10 pen Rs 40';
+      document.getElementById('chat-input').value = sampleVoiceQuery;
+      showToast('Voice captured: "Dollar SP-10 pen Rs 40"');
+    });
+
+    // 8. TAX & SMART BACHAT LEDGER
+    function renderDashboard() {
+      const { spend, tax, overcharge, saved } = state.ledger;
+      const goods = Math.max(0, spend - tax - overcharge);
+      const goodsPct = ((goods / spend) * 100).toFixed(1);
+      const taxPct = ((tax / spend) * 100).toFixed(1);
+      const overPct = ((overcharge / spend) * 100).toFixed(1);
+
+      document.getElementById('kpi-total-spend').textContent = `Rs. ${spend.toLocaleString()}`;
+      document.getElementById('kpi-total-tax').textContent = `Rs. ${tax.toLocaleString()}`;
+      document.getElementById('kpi-total-overcharge').textContent = `Rs. ${overcharge.toLocaleString()}`;
+      document.getElementById('kpi-total-saved').textContent = `Rs. ${saved.toLocaleString()}`;
+
+      document.getElementById('bar-goods-label').textContent = `Rs. ${goods.toLocaleString()} (${goodsPct}%)`;
+      document.getElementById('bar-goods-fill').style.width = `${goodsPct}%`;
+      document.getElementById('bar-tax-label').textContent = `Rs. ${tax.toLocaleString()} (${taxPct}%)`;
+      document.getElementById('bar-tax-fill').style.width = `${taxPct}%`;
+      document.getElementById('bar-overcharge-label').textContent = `Rs. ${overcharge.toLocaleString()} (${overPct}%)`;
+      document.getElementById('bar-overcharge-fill').style.width = `${Math.max(4, overPct)}%`;
+
+      const nearestBazar = (CITY_SASTA_BAZARS[state.city] || CITY_SASTA_BAZARS.Lahore)[0];
+      const tips = [
+        {
+          icon: 'fa-store',
+          title: `Shop at ${nearestBazar.name} (${nearestBazar.distance})`,
+          desc: `Save ${nearestBazar.savings} on fresh vegetables, poultry, and sugar compared to open retail shops in ${state.city}.`,
+        },
+        {
+          icon: 'fa-tags',
+          title: 'Compare Branded Items Across Pakistani Websites',
+          desc: 'Check electronics, cosmetics & household brands on Daraz, PriceOye & Imtiaz in Tab 2 — saving up to 20% below MRP.',
+        },
+        {
+          icon: 'fa-qrcode',
+          title: 'Verify FBR Tier-1 POS Receipts',
+          desc: `You paid Rs. ${tax.toLocaleString()} in GST/POS taxes. Verify FBR QR codes in Tax Asaan so retailers cannot pocket your tax.`,
+        },
+      ];
+
+      document.getElementById('bachat-tips-list').innerHTML = tips
+        .map(
+          (t) => `
+        <div class="p-3.5 rounded-2xl bg-cream-warm border border-pakGreen-mint flex items-start gap-3">
+          <div class="w-9 h-9 rounded-xl bg-pakGreen-light text-pakGreen flex items-center justify-center flex-shrink-0 mt-0.5">
+            <i class="fa-solid ${t.icon}"></i>
+          </div>
+          <div>
+            <h4 class="text-xs font-extrabold text-charcoal">${t.title}</h4>
+            <p class="text-[11px] text-stone-600 mt-0.5">${t.desc}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Saved Complaints History (Cloud Persisted) -->
+      <div class="bg-cream rounded-3xl border border-pakGreen-mint p-6 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="text-xs font-extrabold uppercase tracking-wider text-softRose">Personal Citizen Case Tracker</span>
+            <h3 class="text-lg font-extrabold text-charcoal">My Saved Complaints History</h3>
+          </div>
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-softRose-light text-softRose" id="complaints-count-badge">0 Filed Reports</span>
+        </div>
+        <div id="saved-complaints-list" class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          <!-- Populated live from citizen's cloud database -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CITIZEN AUTHENTICATION & PROFILE PORTAL MODAL -->
+  <div id="auth-modal" class="fixed inset-0 z-50 hidden bg-charcoal/55 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-cream rounded-3xl border border-pakGreen-mint max-w-md w-full p-6 shadow-xl space-y-5 fade-in">
+      <div class="flex items-center justify-between border-b border-cream-border pb-3">
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-pakGreen">Har Shahri Ka Portal</span>
+          <h3 id="auth-modal-title" class="text-lg font-extrabold text-charcoal">Citizen Login &amp; Cloud Vault</h3>
+        </div>
+        <button id="close-auth-modal-btn" type="button" class="w-9 h-9 rounded-full bg-cream-warm hover:bg-softRose-light text-charcoal hover:text-softRose flex items-center justify-center cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Auth Mode Switcher Tabs -->
+      <div class="grid grid-cols-2 gap-2 bg-cream-warm p-1.5 rounded-xl border border-cream-border">
+        <button type="button" id="auth-tab-login" class="py-2 rounded-lg text-xs font-extrabold bg-pakGreen text-white cursor-pointer">Sign In</button>
+        <button type="button" id="auth-tab-signup" class="py-2 rounded-lg text-xs font-extrabold text-charcoal hover:bg-pakGreen-light cursor-pointer">Create Citizen ID</button>
+      </div>
+
+      <!-- Email / Password + Profile Fields Form -->
+      <form id="citizen-auth-form" class="space-y-3">
+        <div id="signup-extra-fields" class="hidden space-y-3">
+          <div>
+            <label for="auth-fullname" class="block text-xs font-bold text-charcoal mb-1">Full Name (Poora Naam)</label>
+            <input id="auth-fullname" type="text" placeholder="e.g. Ayesha Tariq"
+              class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm text-charcoal focus:outline-none focus:border-pakGreen" />
+          </div>
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label for="auth-city" class="block text-xs font-bold text-charcoal mb-1">Preferred City</label>
+              <select id="auth-city" class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3 py-2.5 text-xs font-bold text-charcoal focus:outline-none focus:border-pakGreen">
+                <option value="Lahore">Lahore</option>
+                <option value="Rawalpindi">Rawalpindi</option>
+                <option value="Faisalabad">Faisalabad</option>
+                <option value="Multan">Multan</option>
+                <option value="Gujranwala">Gujranwala</option>
+              </select>
+            </div>
+            <div>
+              <label for="auth-cnic" class="block text-xs font-bold text-charcoal mb-1">CNIC / Phone (Optional)</label>
+              <input id="auth-cnic" type="text" placeholder="35202-XXXXXXX-X"
+                class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3 py-2.5 text-xs text-charcoal focus:outline-none focus:border-pakGreen" />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="auth-email" class="block text-xs font-bold text-charcoal mb-1">Email Address</label>
+          <input id="auth-email" type="email" required placeholder="citizen@example.com"
+            class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm text-charcoal focus:outline-none focus:border-pakGreen" />
+        </div>
+
+        <div>
+          <label for="auth-password" class="block text-xs font-bold text-charcoal mb-1">Password</label>
+          <input id="auth-password" type="password" required minlength="6" placeholder="••••••••"
+            class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm text-charcoal focus:outline-none focus:border-pakGreen" />
+        </div>
+
+        <button id="auth-submit-btn" type="submit"
+          class="w-full py-3 rounded-xl bg-pakGreen hover:bg-pakGreen-medium text-white font-bold text-sm shadow-sm transition-all cursor-pointer">
+          Sign In to Cloud Portal
+        </button>
+      </form>
+
+      <div class="relative flex items-center justify-center">
+        <div class="border-t border-cream-border w-full"></div>
+        <span class="bg-cream px-2.5 text-[11px] font-bold text-stone-400 uppercase">Or Instant Access</span>
+        <div class="border-t border-cream-border w-full"></div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <button id="google-signin-btn" type="button"
+          class="py-2.5 px-3 rounded-xl bg-white hover:bg-cream-warm border border-stone-300 text-charcoal text-xs font-bold flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fa-brands fa-google text-softRose"></i>
+          <span>Google Sign-In</span>
+        </button>
+        <button id="demo-citizen-btn" type="button"
+          class="py-2.5 px-3 rounded-xl bg-softRose-light hover:bg-softRose text-softRose hover:text-white border border-softRose/25 text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
+          <i class="fa-solid fa-bolt"></i>
+          <span>Demo Citizen Mode</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CITIZEN PROFILE SETTINGS MODAL -->
+  <div id="profile-modal" class="fixed inset-0 z-50 hidden bg-charcoal/55 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-cream rounded-3xl border border-pakGreen-mint max-w-md w-full p-6 shadow-xl space-y-4 fade-in">
+      <div class="flex items-center justify-between border-b border-cream-border pb-3">
+        <div>
+          <span class="text-[11px] font-extrabold uppercase tracking-wider text-pakGreen">Verified Citizen Profile</span>
+          <h3 class="text-lg font-extrabold text-charcoal">Account &amp; Complaint Auto-Fill Settings</h3>
+        </div>
+        <button id="close-profile-modal-btn" type="button" class="w-9 h-9 rounded-full bg-cream-warm hover:bg-softRose-light text-charcoal hover:text-softRose flex items-center justify-center cursor-pointer">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="p-3 rounded-2xl bg-pakGreen-light/60 border border-pakGreen/20 text-xs space-y-1">
+        <p class="font-bold text-pakGreen">Complete Citizen Cloud UID:</p>
+        <p id="profile-full-uid" class="font-mono text-[11px] text-charcoal break-all">demo-citizen-uid</p>
+      </div>
+      <form id="profile-update-form" class="space-y-3">
+        <div>
+          <label for="prof-fullname" class="block text-xs font-bold text-charcoal mb-1">Full Name</label>
+          <input id="prof-fullname" type="text" required
+            class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm text-charcoal focus:outline-none focus:border-pakGreen" />
+        </div>
+        <div>
+          <label for="prof-city" class="block text-xs font-bold text-charcoal mb-1">Preferred Punjab City</label>
+          <select id="prof-city" class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm font-bold text-charcoal focus:outline-none focus:border-pakGreen">
+            <option value="Lahore">Lahore</option>
+            <option value="Rawalpindi">Rawalpindi</option>
+            <option value="Faisalabad">Faisalabad</option>
+            <option value="Multan">Multan</option>
+            <option value="Gujranwala">Gujranwala</option>
+          </select>
+        </div>
+        <div>
+          <label for="prof-cnic" class="block text-xs font-bold text-charcoal mb-1">Masked CNIC / Phone Reference (Private)</label>
+          <input id="prof-cnic" type="text" placeholder="35202-XXXXXXX-X"
+            class="w-full bg-cream-warm border border-pakGreen-mint rounded-xl px-3.5 py-2.5 text-sm text-charcoal focus:outline-none focus:border-pakGreen" />
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl bg-pakGreen hover:bg-pakGreen-medium text-white font-bold text-sm cursor-pointer">
+          Save Profile to Cloud
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- FOOTER WITH ALISHBATECHWORLD CREDIT -->
